@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace = "com.martin.domain"
+    compileSdk = 34
 }
 
 dependencies {
