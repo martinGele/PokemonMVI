@@ -1,6 +1,6 @@
 package com.martin.domain.model
 
-data class GetPokemon(
+ data class GetPokemon(
     val count: Int,
     val next: String,
     val previous: Any,

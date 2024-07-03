@@ -1,6 +1,7 @@
 package com.martin.domain.base
 
 
+import com.martin.data.base.ErrorResultResponse
 import com.slack.eithernet.ApiResult
 
 fun <T : Any, S : Any, E : Any> ApiResult<S, ErrorResultResponse>.asResult(

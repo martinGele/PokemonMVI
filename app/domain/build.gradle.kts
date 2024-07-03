@@ -34,8 +34,5 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.slack.eithernet)
-    implementation(libs.moshi)
-    implementation(libs.moshi.codegen)
-
     implementation(project(":app:data"))
 }

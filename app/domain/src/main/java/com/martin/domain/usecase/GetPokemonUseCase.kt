@@ -14,13 +14,10 @@ class GetPokemonUseCase @Inject constructor(
     private val getPokemonMapper: GetPokemonMapper
 ) {
 
-
     operator fun invoke(): Flow<BaseResult<GetPokemon, GetPokemonError>> = flow {
         emit(BaseResult.Loading())
         val pokemon = getPokemonRepository.getPokemon()
         val result = getPokemonMapper.mapAsResult(pokemon)
         emit(result)
     }
-
-
 }

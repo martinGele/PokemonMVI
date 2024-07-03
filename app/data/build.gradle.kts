@@ -23,10 +23,10 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField("String", "BASE_URL", "\"https://pokeapi.co/api/v2/\"")
+            buildConfigField("String", "BASE_URL", "\"https://pokeapi.co\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://pokeapi.co/api/v2/\"")
+            buildConfigField("String", "BASE_URL", "\"https://pokeapi.co\"")
         }
     }
 }
@@ -41,9 +41,9 @@ dependencies {
     implementation(libs.retrofit.moshi)
     implementation(libs.okhttp)
     implementation(libs.okhttp.tls)
+    implementation(libs.okhttp.interceptor)
     implementation(libs.moshi)
-    implementation(libs.moshi.codegen)
-
+    kapt(libs.moshi.codegen)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 

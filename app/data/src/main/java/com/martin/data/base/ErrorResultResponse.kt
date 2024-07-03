@@ -1,4 +1,4 @@
-package com.martin.domain.base
+package com.martin.data.base
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

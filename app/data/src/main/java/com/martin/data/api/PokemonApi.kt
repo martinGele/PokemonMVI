@@ -1,15 +1,14 @@
 package com.martin.data.api
 
+import com.martin.data.base.ErrorResultResponse
 import com.martin.data.response.PokemonResponseDTO
 import com.slack.eithernet.ApiResult
-import com.slack.eithernet.DecodeErrorBody
-import retrofit2.http.POST
+import retrofit2.http.GET
 
 
 interface PokemonApi {
 
-    @DecodeErrorBody
-    @POST("v2.0/users/refresh")
-    fun getPokemon(): ApiResult<PokemonResponseDTO, ErrorResultResponseDTO>
+    @GET("/api/v2/pokemon-species")
+    suspend fun getPokemon(): ApiResult<PokemonResponseDTO, ErrorResultResponse>
 
 }
