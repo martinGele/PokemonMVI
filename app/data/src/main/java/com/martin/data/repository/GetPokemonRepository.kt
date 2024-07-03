@@ -10,4 +10,8 @@ class GetPokemonRepository @Inject constructor(private val pokemonApi: PokemonAp
 
     suspend fun getPokemon(): ApiResult<PokemonResponseDTO, ErrorResultResponse> =
         pokemonApi.getPokemon()
+
+
+    suspend fun getPokemonByUrl(url: String): ApiResult<PokemonResponseDTO, ErrorResultResponse> =
+        pokemonApi.getPokemonByUrl(url)
 }
