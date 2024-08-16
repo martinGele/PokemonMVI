@@ -3,6 +3,8 @@ package com.martin.ui.state
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.martin.domain.base.BaseResult
+import com.martin.domain.model.GetPokemon
+import com.martin.domain.model.GetPokemonError
 import com.martin.domain.usecase.GetNextPreviousPokemonUseCase
 import com.martin.domain.usecase.GetPokemonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,37 +30,14 @@ class HomeViewModel @Inject constructor(
     init {
         getPokemon()
             .flowOn(Dispatchers.IO)
-            .onEach { data ->
-                when (data) {
-                    is BaseResult.Success -> {
-                        setUiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                result = data.data.results.map { result ->
-                                    Result(
-                                        name = result.name,
-                                        url = result.url
-                                    )
-                                },
-                                next = data.data.next,
-                                previous = data.data.previous
-                            )
-                        }
-                    }
-                    is BaseResult.FeatureFailure -> {
-                        setUiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
-                            )
-                        }
-                    }
+            .onEach(::mapPokemonDataToUiState)
+            .launchIn(viewModelScope)
+    }
 
-                    else -> {}
-                }
-
-            }.launchIn(viewModelScope)
+    private fun getNextPreviousPokemon(url: String) {
+        getPokemonByUrl(url).flowOn(Dispatchers.IO)
+            .onEach(::mapPokemonDataToUiState)
+            .launchIn(viewModelScope)
     }
 
     fun handleAction(action: HomeUiAction) {
@@ -77,38 +56,36 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getNextPreviousPokemon(url: String) {
-        getPokemonByUrl(url).flowOn(Dispatchers.IO)
-            .onEach { data ->
-                when (data) {
-                    is BaseResult.Success -> {
-                        setUiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = false,
-                                result = data.data.results.map { result ->
-                                    Result(
-                                        name = result.name,
-                                        url = result.url
-                                    )
-                                },
-                                next = data.data.next,
-                                previous = data.data.previous
-                            )
-                        }
-                    }
 
-                    is BaseResult.FeatureFailure -> {
-                        setUiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isError = true
+    private fun mapPokemonDataToUiState(data: BaseResult<GetPokemon, GetPokemonError>) {
+        when (data) {
+            is BaseResult.Success -> {
+                setUiState.update { currentState ->
+                    currentState.copy(
+                        isLoading = false,
+                        isError = false,
+                        result = data.data.results.map { result ->
+                            Result(
+                                name = result.name,
+                                url = result.url
                             )
-                        }
-                    }
-                    else -> {}
+                        },
+                        next = data.data.next,
+                        previous = data.data.previous
+                    )
                 }
+            }
 
-            }.launchIn(viewModelScope)
+            is BaseResult.FeatureFailure -> {
+                setUiState.update { currentState ->
+                    currentState.copy(
+                        isLoading = false,
+                        isError = true
+                    )
+                }
+            }
+
+            else -> {}
+        }
     }
 }
